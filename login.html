@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamified • Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js"></script>
+    <script defer src="theme.js"></script>
+    <script defer src="auth.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="branding">
+          <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px">
+            <img class="logo" src="assets/logo.svg" alt="Gamified" onerror="this.style.display='none'" />
+            <span class="brand-text">Gamified</span>
+          </a>
+        </div>
+        <nav class="actions header-auth"></nav>
+      </div>
+    </header>
+
+    <main class="container" style="padding:24px 0;">
+      <section class="card" style="max-width:520px;margin:0 auto;">
+        <div class="card-body">
+          <h2 style="margin:0 0 8px 0;">Welcome back</h2>
+          <p class="muted" style="margin:0 0 16px 0;">Log in to continue shopping.</p>
+          <form id="loginForm" style="display:grid; gap:12px;">
+            <div>
+              <label class="muted" for="email">Email</label>
+              <input id="email" type="email" required style="width:100%; height:38px; border-radius:10px; padding:0 12px; border:1px solid var(--ring); background:var(--panel); color:var(--text);" />
+            </div>
+            <div>
+              <label class="muted" for="password">Password</label>
+              <input id="password" type="password" required minlength="4" style="width:100%; height:38px; border-radius:10px; padding:0 12px; border:1px solid var(--ring); background:var(--panel); color:var(--text);" />
+            </div>
+            <button class="buy-now" type="submit">Log in</button>
+            <p class="muted" style="margin:6px 0 0 0;">New here? <a href="signup.html">Create an account</a></p>
+            <div id="error" class="muted" style="color:var(--danger);"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Gamified. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Support</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      (function(){
+        const yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+        const form = document.getElementById('loginForm');
+        const err = document.getElementById('error');
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          err.textContent = '';
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value; // kept for symmetry
+          try {
+            window.Auth.login({email, password});
+            window.location.href = 'index.html';
+          } catch(ex){ err.textContent = ex.message || 'Login failed'; }
+        });
+      })();
+    </script>
+  </body>
+  </html>
+
+
+

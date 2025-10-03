@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamified Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js"></script>
+    <script defer src="theme.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="branding">
+          <img class="logo" src="assets/logo.svg" alt="Gamified" onerror="this.style.display='none'" />
+          <span class="brand-text">Gamified</span>
+        </div>
+        <div class="search">
+          <input type="search" id="searchInput" placeholder="Search games..." />
+        </div>
+        <nav class="actions header-auth">
+          <button id="cartToggle" class="cart-button" aria-controls="cartPanel" aria-expanded="false">
+            🛒 <span id="cartCount" class="badge">0</span>
+          </button>
+          <button id="buyNowTop" class="buy-now">Buy Now</button>
+          <button class="cart-button theme-toggle" type="button">Light Mode</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main">
+      <aside id="filters" class="filters" aria-label="Filters">
+        <h2>Filters</h2>
+        <div class="filter-group">
+          <label>
+            <input type="checkbox" name="genre" value="action" /> Action
+          </label>
+          <label>
+            <input type="checkbox" name="genre" value="adventure" /> Adventure
+          </label>
+          <label>
+            <input type="checkbox" name="genre" value="rpg" /> RPG
+          </label>
+          <label>
+            <input type="checkbox" name="genre" value="sports" /> Sports
+          </label>
+        </div>
+        <div class="filter-group">
+          <label for="priceRange">Max Price: <span id="priceValue">$60</span></label>
+          <input type="range" id="priceRange" min="0" max="100" value="60" />
+        </div>
+      </aside>
+
+      <section class="catalog" aria-label="Game catalog">
+        <h1 class="visually-hidden">Store</h1>
+        <div id="gameGrid" class="grid">
+          <!-- Real games (Steam headers) -->
+          <article class="card" data-title="Grand Theft Auto V" data-genre="action" data-price="29.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg" alt="Grand Theft Auto V cover" />
+            <div class="card-body">
+              <h3>Grand Theft Auto V</h3>
+              <p class="muted">Action • PC</p>
+              <div class="price-row">
+                <span class="price">$29.99</span>
+                <button class="add-to-cart" data-id="271590-gta5">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Red Dead Redemption 2" data-genre="adventure" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg" alt="Red Dead Redemption 2 cover" />
+            <div class="card-body">
+              <h3>Red Dead Redemption 2</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1174180-rdr2">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="The Witcher 3: Wild Hunt" data-genre="rpg" data-price="39.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg" alt="The Witcher 3 cover" />
+            <div class="card-body">
+              <h3>The Witcher 3: Wild Hunt</h3>
+              <p class="muted">RPG • PC</p>
+              <div class="price-row">
+                <span class="price">$39.99</span>
+                <button class="add-to-cart" data-id="292030-witcher3">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Cyberpunk 2077" data-genre="rpg" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg" alt="Cyberpunk 2077 cover" />
+            <div class="card-body">
+              <h3>Cyberpunk 2077</h3>
+              <p class="muted">RPG • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1091500-cyberpunk2077">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="ELDEN RING" data-genre="rpg" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg" alt="ELDEN RING cover" />
+            <div class="card-body">
+              <h3>ELDEN RING</h3>
+              <p class="muted">RPG • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1245620-eldenring">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="God of War" data-genre="action" data-price="49.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg" alt="God of War cover" />
+            <div class="card-body">
+              <h3>God of War</h3>
+              <p class="muted">Action • PC</p>
+              <div class="price-row">
+                <span class="price">$49.99</span>
+                <button class="add-to-cart" data-id="1593500-godofwar">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Horizon Zero Dawn" data-genre="adventure" data-price="49.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1151640/header.jpg" alt="Horizon Zero Dawn cover" />
+            <div class="card-body">
+              <h3>Horizon Zero Dawn</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$49.99</span>
+                <button class="add-to-cart" data-id="1151640-hzd">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Marvel's Spider-Man Remastered" data-genre="action" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1817070/header.jpg" alt="Spider-Man Remastered cover" />
+            <div class="card-body">
+              <h3>Marvel's Spider-Man Remastered</h3>
+              <p class="muted">Action • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1817070-spiderman">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Forza Horizon 5" data-genre="sports" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg" alt="Forza Horizon 5 cover" />
+            <div class="card-body">
+              <h3>Forza Horizon 5</h3>
+              <p class="muted">Racing • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1551360-forza5">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="EA SPORTS FC 24" data-genre="sports" data-price="69.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2195250/header.jpg" alt="EA SPORTS FC 24 cover" />
+            <div class="card-body">
+              <h3>EA SPORTS FC 24</h3>
+              <p class="muted">Sports • PC</p>
+              <div class="price-row">
+                <span class="price">$69.99</span>
+                <button class="add-to-cart" data-id="2195250-fc24">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Apex Legends" data-genre="action" data-price="0.00">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg" alt="Apex Legends cover" />
+            <div class="card-body">
+              <h3>Apex Legends</h3>
+              <p class="muted">Battle Royale • PC</p>
+              <div class="price-row">
+                <span class="price">$0.00</span>
+                <button class="add-to-cart" data-id="1172470-apex">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Counter-Strike 2" data-genre="action" data-price="0.00">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg" alt="Counter-Strike 2 cover" />
+            <div class="card-body">
+              <h3>Counter-Strike 2</h3>
+              <p class="muted">FPS • PC</p>
+              <div class="price-row">
+                <span class="price">$0.00</span>
+                <button class="add-to-cart" data-id="730-cs2">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Dota 2" data-genre="strategy" data-price="0.00">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570/header.jpg" alt="Dota 2 cover" />
+            <div class="card-body">
+              <h3>Dota 2</h3>
+              <p class="muted">MOBA • PC</p>
+              <div class="price-row">
+                <span class="price">$0.00</span>
+                <button class="add-to-cart" data-id="570-dota2">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Baldur's Gate 3" data-genre="rpg" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg" alt="Baldur's Gate 3 cover" />
+            <div class="card-body">
+              <h3>Baldur's Gate 3</h3>
+              <p class="muted">RPG • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="1086940-bg3">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Stardew Valley" data-genre="simulation" data-price="14.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/413150/header.jpg" alt="Stardew Valley cover" />
+            <div class="card-body">
+              <h3>Stardew Valley</h3>
+              <p class="muted">Simulation • PC</p>
+              <div class="price-row">
+                <span class="price">$14.99</span>
+                <button class="add-to-cart" data-id="413150-stardew">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Hades" data-genre="action" data-price="24.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg" alt="Hades cover" />
+            <div class="card-body">
+              <h3>Hades</h3>
+              <p class="muted">Action Roguelike • PC</p>
+              <div class="price-row">
+                <span class="price">$24.99</span>
+                <button class="add-to-cart" data-id="1145360-hades">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Hollow Knight" data-genre="adventure" data-price="14.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg" alt="Hollow Knight cover" />
+            <div class="card-body">
+              <h3>Hollow Knight</h3>
+              <p class="muted">Metroidvania • PC</p>
+              <div class="price-row">
+                <span class="price">$14.99</span>
+                <button class="add-to-cart" data-id="367520-hollowknight">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Sekiro: Shadows Die Twice" data-genre="action" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/814380/header.jpg" alt="Sekiro cover" />
+            <div class="card-body">
+              <h3>Sekiro: Shadows Die Twice</h3>
+              <p class="muted">Action • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="814380-sekiro">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Monster Hunter: World" data-genre="action" data-price="29.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg" alt="Monster Hunter World cover" />
+            <div class="card-body">
+              <h3>Monster Hunter: World</h3>
+              <p class="muted">Action • PC</p>
+              <div class="price-row">
+                <span class="price">$29.99</span>
+                <button class="add-to-cart" data-id="582010-mhw">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Resident Evil 4" data-genre="horror" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg" alt="Resident Evil 4 cover" />
+            <div class="card-body">
+              <h3>Resident Evil 4</h3>
+              <p class="muted">Horror • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="2050650-re4">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Assassin's Creed Mirage" data-genre="adventure" data-price="49.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/368870/header.jpg" alt="Assassin's Creed Mirage cover" />
+            <div class="card-body">
+              <h3>Assassin's Creed Mirage</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$49.99</span>
+                <button class="add-to-cart" data-id="368870-acmirage">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Assassin's Creed Valhalla" data-genre="adventure" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2208920/header.jpg" alt="Assassin's Creed Valhalla cover" />
+            <div class="card-body">
+              <h3>Assassin's Creed Valhalla</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="2208920-acvalhalla">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Call of Duty: Modern Warfare II" data-genre="action" data-price="69.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1938090/header.jpg" alt="Call of Duty MWII cover" />
+            <div class="card-body">
+              <h3>Call of Duty: Modern Warfare II</h3>
+              <p class="muted">FPS • PC</p>
+              <div class="price-row">
+                <span class="price">$69.99</span>
+                <button class="add-to-cart" data-id="1938090-mw2">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="PUBG: BATTLEGROUNDS" data-genre="action" data-price="0.00">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/578080/header.jpg" alt="PUBG cover" />
+            <div class="card-body">
+              <h3>PUBG: BATTLEGROUNDS</h3>
+              <p class="muted">Battle Royale • PC</p>
+              <div class="price-row">
+                <span class="price">$0.00</span>
+                <button class="add-to-cart" data-id="578080-pubg">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Overcooked! 2" data-genre="party" data-price="24.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/728880/header.jpg" alt="Overcooked 2 cover" />
+            <div class="card-body">
+              <h3>Overcooked! 2</h3>
+              <p class="muted">Party • PC</p>
+              <div class="price-row">
+                <span class="price">$24.99</span>
+                <button class="add-to-cart" data-id="728880-overcooked2">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Terraria" data-genre="adventure" data-price="9.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/105600/header.jpg" alt="Terraria cover" />
+            <div class="card-body">
+              <h3>Terraria</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$9.99</span>
+                <button class="add-to-cart" data-id="105600-terraria">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="No Man's Sky" data-genre="adventure" data-price="59.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/275850/header.jpg" alt="No Man's Sky cover" />
+            <div class="card-body">
+              <h3>No Man's Sky</h3>
+              <p class="muted">Adventure • PC</p>
+              <div class="price-row">
+                <span class="price">$59.99</span>
+                <button class="add-to-cart" data-id="275850-nms">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="Subnautica" data-genre="adventure" data-price="29.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg" alt="Subnautica cover" />
+            <div class="card-body">
+              <h3>Subnautica</h3>
+              <p class="muted">Survival • PC</p>
+              <div class="price-row">
+                <span class="price">$29.99</span>
+                <button class="add-to-cart" data-id="264710-subnautica">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-title="The Elder Scrolls V: Skyrim" data-genre="rpg" data-price="39.99">
+            <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/72850/header.jpg" alt="Skyrim cover" />
+            <div class="card-body">
+              <h3>The Elder Scrolls V: Skyrim</h3>
+              <p class="muted">RPG • PC</p>
+              <div class="price-row">
+                <span class="price">$39.99</span>
+                <button class="add-to-cart" data-id="72850-skyrim">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside id="cartPanel" class="cart" aria-label="Shopping cart" aria-hidden="true">
+        <div class="cart-header">
+          <h2>Cart</h2>
+          <button id="closeCart" aria-label="Close cart">✕</button>
+        </div>
+        <ul id="cartItems" class="cart-items"></ul>
+        <div class="cart-footer">
+          <div class="summary">
+            <span>Subtotal</span>
+            <strong id="cartSubtotal">$0.00</strong>
+          </div>
+          <button id="checkoutBtn" class="buy-now full">Buy Now</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Gamified. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Support</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+  </html>
+
+

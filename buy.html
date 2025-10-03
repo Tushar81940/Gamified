@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamified • Checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js"></script>
+    <script defer src="theme.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="branding">
+          <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px">
+            <img class="logo" src="assets/logo.svg" alt="Gamified" onerror="this.style.display='none'" />
+            <span class="brand-text">Gamified</span>
+          </a>
+        </div>
+        <nav class="actions header-auth">
+          <a class="back-link" href="index.html">← Back to Store</a>
+          <button class="cart-button theme-toggle" type="button">Light Mode</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container" style="padding:24px 0;">
+      <section class="card" style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <div style="padding:16px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <img id="buyImage" src="" alt="" style="width:280px; height:158px; object-fit:cover; border-radius:10px; border:1px solid var(--ring)" />
+            <div>
+              <h1 id="buyTitle" style="margin:0 0 6px 0;"></h1>
+              <p id="buyGenre" class="muted" style="margin:0 0 12px 0;"></p>
+              <p id="buyDesc" style="margin:0 0 12px 0;"></p>
+              <div id="buyPlatforms" class="detail-meta"></div>
+            </div>
+          </div>
+        </div>
+        <aside style="padding:16px; border-left:1px solid var(--ring);">
+          <div style="display:grid; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="muted">Price</span>
+              <strong id="buyPrice"></strong>
+            </div>
+            <button id="buyNow" class="buy-now full">Confirm Purchase</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Gamified. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Support</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+        const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
+        const rate = 83;
+        const toInr = (usd) => usd * rate;
+
+        const game = (window.GAMES || []).find((g) => g.id === id);
+        if (!game) {
+          document.querySelector('main').innerHTML = '<p style="padding:24px">Game not found. <a href=\'index.html\'>Return to store</a>.</p>';
+          return;
+        }
+
+        document.getElementById('buyTitle').textContent = game.title;
+        document.getElementById('buyGenre').textContent = game.genre.toUpperCase();
+        document.getElementById('buyDesc').textContent = game.desc || '';
+        document.getElementById('buyImage').src = game.image;
+        document.getElementById('buyImage').alt = game.title;
+        document.getElementById('buyPlatforms').innerHTML = (game.platforms || []).map(p => `<span class=\"badge\">${p}</span>`).join('');
+        document.getElementById('buyPrice').textContent = inr.format(toInr(game.priceUsd));
+
+        document.getElementById('buyNow').addEventListener('click', function () {
+          alert(`Purchased: ${game.title} for ${inr.format(toInr(game.priceUsd))}`);
+          window.location.href = 'index.html';
+        });
+      })();
+    </script>
+  </body>
+  </html>
+
+

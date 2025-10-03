@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gamified • Cart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js"></script>
+    <script defer src="theme.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="branding">
+          <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px">
+            <img class="logo" src="assets/logo.svg" alt="Gamified" onerror="this.style.display='none'" />
+            <span class="brand-text">Gamified</span>
+          </a>
+        </div>
+        <nav class="actions header-auth">
+          <a class="back-link" href="index.html">← Continue Shopping</a>
+          <button class="cart-button theme-toggle" type="button">Light Mode</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container" style="padding:24px 0;">
+      <section class="card" style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <div style="padding:12px;">
+          <ul id="cartList" class="cart-items"></ul>
+        </div>
+        <aside style="padding:16px; border-left:1px solid var(--ring);">
+          <div style="display:grid; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="muted">Subtotal</span>
+              <strong id="cartTotal"></strong>
+            </div>
+            <button id="checkout" class="buy-now full">Checkout</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Gamified. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Support</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+        const listEl = document.getElementById('cartList');
+        const totalEl = document.getElementById('cartTotal');
+        const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
+        const rate = 83;
+        const toInr = (usd) => usd * rate;
+
+        function load() {
+          try {
+            const raw = localStorage.getItem('gamified-cart-v1');
+            const parsed = raw ? JSON.parse(raw) : {};
+            // If values are numbers, migrate to object format
+            const needsMigration = Object.values(parsed).some((v) => typeof v === 'number');
+            if (needsMigration) {
+              const migrated = {};
+              Object.keys(parsed).forEach((id) => {
+                const qty = Number(parsed[id]) || 0;
+                const game = (window.GAMES || []).find(g => g.id === id);
+                if (game && qty > 0) migrated[id] = { id, title: game.title, price: Number(game.priceUsd) || 0, image: game.image, qty };
+              });
+              save(migrated);
+              return migrated;
+            }
+            return parsed;
+          } catch {
+            return {};
+          }
+        }
+
+        function save(items) {
+          try { localStorage.setItem('gamified-cart-v1', JSON.stringify(items)); } catch {}
+        }
+
+        function render() {
+          const items = load();
+          listEl.innerHTML = '';
+          let subtotalUsd = 0;
+          Object.keys(items).forEach((id) => {
+            const entry = items[id];
+            const qty = Number(entry.qty || entry) || 0;
+            const price = Number(entry.price);
+            const title = entry.title || ((window.GAMES || []).find(g => g.id === id)?.title) || 'Item';
+            const image = entry.image || ((window.GAMES || []).find(g => g.id === id)?.image) || '';
+            subtotalUsd += qty * price;
+            const li = document.createElement('li');
+            li.className = 'cart-item';
+            li.innerHTML = `
+              <img src="${image}" alt="${title}" />
+              <div>
+                <div class="cart-item-title">${title}</div>
+                <div class="muted">${inr.format(toInr(price))} each</div>
+                <div class="qty" data-id="${id}">
+                  <button class="dec">−</button>
+                  <span class="val">${qty}</span>
+                  <button class="inc">+</button>
+                </div>
+              </div>
+              <div>
+                <button class="remove" data-id="${id}">Remove</button>
+              </div>`;
+            listEl.appendChild(li);
+          });
+          totalEl.textContent = inr.format(toInr(subtotalUsd));
+
+          // Bind qty and remove
+          listEl.querySelectorAll('.qty').forEach((el) => {
+            const id = el.getAttribute('data-id');
+            el.querySelector('.dec').addEventListener('click', () => {
+              const items = load();
+              items[id] = Math.max(1, (items[id] || 1) - 1);
+              save(items); render();
+            });
+            el.querySelector('.inc').addEventListener('click', () => {
+              const items = load();
+              items[id] = (items[id] || 0) + 1;
+              save(items); render();
+            });
+          });
+          listEl.querySelectorAll('.remove').forEach((btn) => {
+            const id = btn.getAttribute('data-id');
+            btn.addEventListener('click', () => {
+              const items = load();
+              delete items[id];
+              save(items); render();
+            });
+          });
+        }
+
+        document.getElementById('checkout').addEventListener('click', () => {
+          window.location.href = 'buy.html?id=' + encodeURIComponent(Object.keys(load())[0] || '');
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+  </html>
+
+
