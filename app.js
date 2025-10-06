@@ -6,6 +6,7 @@
   const cartItemsList = document.getElementById('cartItems');
   const cartCount = document.getElementById('cartCount');
   const cartSubtotalEl = document.getElementById('cartSubtotal');
+  const searchCartCount = document.getElementById('searchCartCount');
   const checkoutBtn = document.getElementById('checkoutBtn');
   const buyNowTop = document.getElementById('buyNowTop');
   const searchInput = document.getElementById('searchInput');
@@ -242,7 +243,9 @@
       cartItemsList.appendChild(li);
     });
 
-    cartCount.textContent = String(cart.count());
+    const count = cart.count();
+    cartCount.textContent = String(count);
+    if (searchCartCount) searchCartCount.textContent = String(count);
     cartSubtotalEl.textContent = formatMoney(convertUsdToInr(cart.subtotal()));
 
     // Bind qty and remove events per item
